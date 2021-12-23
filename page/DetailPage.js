@@ -9,6 +9,7 @@ import {
   Alert,
   StatusBar,
   SafeAreaView,
+  Share
 } from "react-native";
 
 export default function DetailPage({ navigation, route }) {
@@ -45,6 +46,12 @@ export default function DetailPage({ navigation, route }) {
   const popup = () => {
     Alert.alert("팝업!!");
   };
+  const share = () => {
+    Share.share({
+        message:`${tip.title} \n\n ${tip.desc} \n\n ${tip.image}`,
+    });
+}
+
   return (
     // ScrollView에서의 flex 숫자는 의미가 없습니다. 정확히 보여지는 화면을 몇등분 하지 않고
     // 화면에 넣은 컨텐츠를 모두 보여주려 스크롤 기능이 존재하기 때문입니다.
@@ -56,9 +63,18 @@ export default function DetailPage({ navigation, route }) {
         <View style={styles.textContainer}>
           <Text style={styles.title}>{tip.title}</Text>
           <Text style={styles.desc}>{tip.desc}</Text>
+          <View style = {styles.buttonGroup}>
+
           <TouchableOpacity style={styles.button} onPress={() => popup()}>
             <Text style={styles.buttonText}>팁 찜하기</Text>
           </TouchableOpacity>
+
+          <TouchableOpacity style={styles.button} onPress={() => share()}>
+            <Text style={styles.buttonText}>팁 공유하기</Text>
+          </TouchableOpacity>
+
+
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -88,9 +104,13 @@ const styles = StyleSheet.create({
     marginTop: 10,
     color: "#eee",
   },
+  buttonGroup: {
+    flexDirection:"row",
+},
   button: {
     width: 100,
     marginTop: 20,
+    marginHorizontal : 10,
     padding: 10,
     borderWidth: 1,
     borderColor: "deeppink",
