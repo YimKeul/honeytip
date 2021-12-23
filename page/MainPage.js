@@ -2,14 +2,19 @@ import React,{useState, useEffect} from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView , StatusBar} from 'react-native';
 import data from '../data.json'
 import Card from '../components/Cards';
+import Loading from '../components/Loding';
 const main = 'https://firebasestorage.googleapis.com/v0/b/sparta-image.appspot.com/o/lecture%2Fmain.png?alt=media&token=8e5eb78d-19ee-4359-9209-347d125b322c'
 export default function MainPage() {
   //return 구문 밖에서는 슬래시 두개 방식으로 주석
-  
+
   const [state,setState] = useState([])
 
+  const [ready, setReady] = useState(true)
   useEffect(()=>{
-    setState(data)
+    setTimeout(()=>{
+      setState(data)
+      setReady(false)
+    },1000)
   },[])
 
 
@@ -18,7 +23,7 @@ export default function MainPage() {
   let todayCondition = "흐림"
 
 
-  return (
+  return ready ? <Loading/> : (
     /*
       return 구문 안에서는 {슬래시 + * 방식으로 주석
     */
