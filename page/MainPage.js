@@ -7,18 +7,30 @@ const main = 'https://firebasestorage.googleapis.com/v0/b/sparta-image.appspot.c
 export default function MainPage() {
   //return 구문 밖에서는 슬래시 두개 방식으로 주석
 
-  const [state,setState] = useState([])
+  const [state,setState] = useState([]) //전체데이터
+  const [cateState, setCateState] = useState([])
 
   const [ready, setReady] = useState(true)
   useEffect(()=>{
     setTimeout(()=>{
-      setState(data)
+      setState(data.tip)
+      setCateState(data.tip)
       setReady(false)
     },1000)
   },[])
 
+  const category = (cate) => {
+    if(cate == "전체보기"){
+        //전체보기면 원래 꿀팁 데이터를 담고 있는 상태값으로 다시 초기화
+        setCateState(state)
+    }else{
+        setCateState(state.filter((d)=>{
+            return d.category == cate
+        }))
+    }
+}
 
-  let tip = state.tip
+  // let tip = state.tip
   let todayWeather = 10+17
   let todayCondition = "흐림"
 
@@ -29,38 +41,26 @@ export default function MainPage() {
     */
 
 
-    <ScrollView style={styles.container}>
-      <StatusBar barStyle="light-content"/>
+<ScrollView style={styles.container}>
       <Text style={styles.title}>나만의 꿀팁</Text>
-      <Text style={styles.weather}>오늘의 날씨 : {todayWeather + 'C ' + todayCondition}</Text>
+			 <Text style={styles.weather}>오늘의 날씨: {todayWeather + '°C ' + todayCondition} </Text>
       <Image style={styles.mainImage} source={{uri:main}}/>
       <ScrollView style={styles.middleContainer} horizontal indicatorStyle={"white"}>
-        <TouchableOpacity style={styles.middleButton01}><Text style={styles.middleButtonText}>생활</Text></TouchableOpacity>
-        <TouchableOpacity style={styles.middleButton02}><Text style={styles.middleButtonText}>재테크</Text></TouchableOpacity>
-        <TouchableOpacity style={styles.middleButton03}><Text style={styles.middleButtonText}>반려견</Text></TouchableOpacity>
-        <TouchableOpacity style={styles.middleButton04}><Text style={styles.middleButtonText}>꿀팁 찜</Text></TouchableOpacity>
+      <TouchableOpacity style={styles.middleButtonAll} onPress={()=>{category('전체보기')}}><Text style={styles.middleButtonTextAll}>전체보기</Text></TouchableOpacity>
+        <TouchableOpacity style={styles.middleButton01} onPress={()=>{category('생활')}}><Text style={styles.middleButtonText}>생활</Text></TouchableOpacity>
+        <TouchableOpacity style={styles.middleButton02} onPress={()=>{category('재테크')}}><Text style={styles.middleButtonText}>재테크</Text></TouchableOpacity>
+        <TouchableOpacity style={styles.middleButton03} onPress={()=>{category('반려견')}}><Text style={styles.middleButtonText}>반려견</Text></TouchableOpacity>
+        <TouchableOpacity style={styles.middleButton04} onPress={()=>{category('꿀팁 찜')}}><Text style={styles.middleButtonText}>꿀팁 찜</Text></TouchableOpacity>
       </ScrollView>
       <View style={styles.cardContainer}>
-        {/* 하나의 카드 영역을 나타내는 View */}
-        {tip.map((content, i)=>{
-          return(
-            //    <View style={{...styles.card , backgroundColor : i%2 === 0 ? "#FFFED7" : undefined}} key = {i}>
-          //   <View style={styles.card} key = {i}>
-          //   <Image style={styles.cardImage} source={{uri:content.image}}/>
-          //   <View style={styles.cardText}>
-          //     <Text style={styles.cardTitle}>{content.title}</Text>
-          //     <Text style={styles.cardDesc} numberOfLines={3}>{content.desc}</Text>
-          //     <Text style={styles.cardDate}>{content.date}</Text>
-          //   </View>
-          // </View>
-          <Card content={content} key={i}/>
-          )
-        })
-      }
+         {/* 하나의 카드 영역을 나타내는 View */}
+         {
+          cateState.map((content,i)=>{
+            return (<Card content={content} key={i}/>)
+          })
+        }
         
       </View>
-   
-
    
     </ScrollView>
   );
@@ -102,6 +102,15 @@ const styles = StyleSheet.create({
     marginLeft:10,
     height:60
   },
+  middleButtonAll: {
+    width:100,
+    height:50,
+    padding:15,
+    backgroundColor:"#20b2aa",
+    borderColor:"deeppink",
+    borderRadius:15,
+    margin:7
+  },
   middleButton01: {
     width:100,
     height:50,
@@ -134,6 +143,12 @@ const styles = StyleSheet.create({
     backgroundColor:"#f886a8",
     borderRadius:15,
     margin:7
+  },
+  middleButtonTextAll: {
+    color:"#fff",
+    fontWeight:"700",
+    //텍스트의 현재 위치에서의 정렬 
+    textAlign:"center"
   },
   middleButtonText: {
     color:"#fff",
@@ -181,4 +196,3 @@ const styles = StyleSheet.create({
 
 
 });
-
