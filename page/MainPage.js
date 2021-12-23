@@ -13,7 +13,7 @@ import Loading from "../components/Loding";
 import {StatusBar} from 'expo-status-bar'
 const main =
   "https://firebasestorage.googleapis.com/v0/b/sparta-image.appspot.com/o/lecture%2Fmain.png?alt=media&token=8e5eb78d-19ee-4359-9209-347d125b322c";
-export default function MainPage() {
+export default function MainPage({navigation, route}) {
   //return 구문 밖에서는 슬래시 두개 방식으로 주석
 
   const [state, setState] = useState([]); //전체데이터
@@ -21,6 +21,12 @@ export default function MainPage() {
 
   const [ready, setReady] = useState(true);
   useEffect(() => {
+
+    navigation.setOptions({
+      title : '나만의 꿀팁'
+    })
+
+
     setTimeout(() => {
       setState(data.tip);
       setCateState(data.tip);
@@ -108,7 +114,7 @@ export default function MainPage() {
       <View style={styles.cardContainer}>
         {/* 하나의 카드 영역을 나타내는 View */}
         {cateState.map((content, i) => {
-          return <Card content={content} key={i} />;
+          return <Card content={content} key={i} navigation={navigation} />;
         })}
       </View>
     </ScrollView>
