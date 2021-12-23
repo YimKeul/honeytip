@@ -6,11 +6,11 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
-  StatusBar,
 } from "react-native";
 import data from "../data.json";
 import Card from "../components/Cards";
 import Loading from "../components/Loding";
+import {StatusBar} from 'expo-status-bar'
 const main =
   "https://firebasestorage.googleapis.com/v0/b/sparta-image.appspot.com/o/lecture%2Fmain.png?alt=media&token=8e5eb78d-19ee-4359-9209-347d125b322c";
 export default function MainPage() {
@@ -53,6 +53,7 @@ export default function MainPage() {
     */
 
     <ScrollView style={styles.container}>
+      <StatusBar style="dark"/>
       <Text style={styles.title}>나만의 꿀팁</Text>
       <Text style={styles.weather}>
         오늘의 날씨: {todayWeather + "°C " + todayCondition}{" "}
