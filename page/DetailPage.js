@@ -27,6 +27,7 @@ export default function DetailPage({ navigation, route }) {
             headerStyle: {
                 backgroundColor: '#000',
                 shadowColor: "#000",
+                height : 100
             },
             headerTintColor: "#fff",
             headerShown : true

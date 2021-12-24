@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -10,15 +10,37 @@ import {
   Linking,
 } from "react-native";
 
-export default function AboutPage() {
+export default function AboutPage({ navigation, route }) {
+  // const [ready, setReady] = useState(true);
+  // useEffect(() => {
+  //   // navigation.setOptions({
+  //   //   headerStyle: {
+  //   //     backgroundColor: "#262c74",
+  //   //     shadowColor: "#262c74",
+  //   //     height:100
+  //   //   },
+  //   // });
+  //   // setTimeout(()=>{
+
+  //   // },0.1)
+  //   setReady(false);
+  // }, []);
+
   const _URL =
     "https://storage.googleapis.com/sparta-image.appspot.com/lecture/about.png";
 
   return (
     <SafeAreaView style={styles.Container}>
       <StatusBar barStyle="light-content" />
-      <View style = {styles.Upper_text}>
-        <Text style = {{color : 'white' , fontWeight : 'bold' , fontSize : 30 , textAlign :'center'}}>
+      <View style={styles.Upper_text}>
+        <Text
+          style={{
+            color: "white",
+            fontWeight: "bold",
+            fontSize: 30,
+            textAlign: "center",
+          }}
+        >
           HI! 스파르타코딩 앱개발 반에 오신것을 환영합니다
         </Text>
       </View>
@@ -74,11 +96,11 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#262c74",
   },
-  Upper_text:{
-    justifyContent : 'center',
-    alignItems : 'center',
-    marginHorizontal : '7%',
-    marginTop : "10%",
+  Upper_text: {
+    justifyContent: "center",
+    alignItems: "center",
+    marginHorizontal: "7%",
+    marginTop: "10%",
   },
 
   Inner_Container: {
@@ -106,14 +128,12 @@ const styles = StyleSheet.create({
 
   text: {
     flex: 1.5,
-    height : '100%',
+    height: "100%",
     marginTop: "2%",
     alignItems: "center",
-    justifyContent:'space-evenly',
+    justifyContent: "space-evenly",
     paddingHorizontal: "5%",
-    paddingBottom : '10%',
+    paddingBottom: "10%",
     borderRadius: 30,
-
   },
 });
-

@@ -60,10 +60,10 @@ export default function MainPage({navigation, route}) {
 
     <ScrollView style={styles.container}>
       <StatusBar style="light"/>
-      {/* <Text style={styles.title}>나만의 꿀팁</Text> */}
       <Text style={styles.weather}>
         오늘의 날씨: {todayWeather + "°C " + todayCondition}{" "}
       </Text>
+      <TouchableOpacity style = {styles.About_Btn} onPress={()=>navigation.navigate("AboutPage")}><Text style={{color:'white', fontWeight:'bold'}}>소개 페이지</Text></TouchableOpacity>
       <Image style={styles.mainImage} source={{ uri: main }} />
       <ScrollView
         style={styles.middleContainer}
@@ -105,7 +105,8 @@ export default function MainPage({navigation, route}) {
         <TouchableOpacity
           style={styles.middleButton04}
           onPress={() => {
-            category("꿀팁 찜");
+            // category("꿀팁 찜");
+            navigation.navigate("LikePage")
           }}
         >
           <Text style={styles.middleButtonText}>꿀팁 찜</Text>
@@ -139,6 +140,18 @@ const styles = StyleSheet.create({
   weather: {
     alignSelf: "flex-end",
     paddingRight: 20,
+    paddingBottom : 10,
+  },
+  About_Btn:{
+    
+    backgroundColor : 'pink',
+    width : '30%',
+    alignItems :'center',
+    padding  : '2%',
+    borderRadius : 20,
+    alignSelf :'flex-end',
+    marginRight : 20
+    
   },
   mainImage: {
     //컨텐츠의 넓이 값
