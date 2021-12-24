@@ -32,6 +32,7 @@ const StackNavigator = () =>{
                 
                 
                 
+                
             }}
 
             
@@ -40,7 +41,16 @@ const StackNavigator = () =>{
 
             {/* 컴포넌트를 페이지로 만들어주는 엘리먼트에 끼워 넣습니다. 이 자체로 이제 페이지 기능을 합니다*/}
             <Stack.Screen name="MainPage" component={MainPage}  />
-            <Stack.Screen name="DetailPage" component={DetailPage}/>
+            <Stack.Screen name="DetailPage" component={DetailPage} options={{
+                headerStyle :{
+                    backgroundColor : 'black',
+                    height : 100,
+                    borderBottomColor : 'black',
+                    shadowColor : 'black'
+                },
+                headerTintColor : 'black',
+                headerShown : false
+            }}/>
         </Stack.Navigator>
 
         
