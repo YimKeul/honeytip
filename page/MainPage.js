@@ -6,12 +6,14 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
+  Alert
 } from "react-native";
 import data from "../data.json";
 import Card from "../components/Cards";
 import Loading from "../components/Loding";
 import {StatusBar} from 'expo-status-bar'
 import * as Location from 'expo-location'
+import axios from "axios";
 const main =
   "https://firebasestorage.googleapis.com/v0/b/sparta-image.appspot.com/o/lecture%2Fmain.png?alt=media&token=8e5eb78d-19ee-4359-9209-347d125b322c";
 export default function MainPage({navigation, route}) {
@@ -19,7 +21,10 @@ export default function MainPage({navigation, route}) {
 
   const [state, setState] = useState([]); //전체데이터
   const [cateState, setCateState] = useState([]);
-
+  const [weather, setWeather] = useState({
+    temp : 0,
+    condition : ''
+  })
   const [ready, setReady] = useState(true);
   useEffect(() => {
 
@@ -44,11 +49,20 @@ export default function MainPage({navigation, route}) {
       //자바스크립트 함수의 실행순서를 고정하기 위해 쓰는 async,await
       await Location.requestForegroundPermissionsAsync();
       const locationData= await Location.getCurrentPositionAsync();
-      // console.log(locationData)
-      console.log("testing")
-      console.log(locationData.coords.latitude)
-      console.log(locationData.coords.longitude)
+      const latitude = locationData.coords.latitude
+      const longitude = locationData.coords.longitude
+      const  API_KEY = '62a3e1c15a974cb7212dd251dddb4fa7'
+      const result = await axios.get(
+        `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&exclude=alerts&appid=${API_KEY}&units=metric`
+      )
 
+      const weather = result.data.current.weather[0].main
+      const temp = result.data.current.temp
+      // console.log(`날씨 : ${weather} , 온도 : ${temp}`)
+      setWeather({temp ,weather})
+
+
+        
     } catch (error) {
       //혹시나 위치를 못가져올 경우를 대비해서, 안내를 준비합니다
       Alert.alert("위치를 찾을 수가 없습니다.", "앱을 껏다 켜볼까요?");
@@ -70,8 +84,8 @@ export default function MainPage({navigation, route}) {
   };
   // let tip = data.tip; // useState 사용 전 이걸로 데이터 불러옴.
   // let tip = state.tip
-  let todayWeather = 10 + 17;
-  let todayCondition = "흐림";
+  // let todayWeather = getLocation.weather;
+  // let todayCondition = getLocation.temp;
 
   return ready ? (
     <Loading />
@@ -83,7 +97,7 @@ export default function MainPage({navigation, route}) {
     <ScrollView style={styles.container}>
       <StatusBar style="light"/>
       <Text style={styles.weather}>
-        오늘의 날씨: {todayWeather + "°C " + todayCondition}{" "}
+        오늘의 날씨: {weather.temp + "°C " + weather.weather}{" "}
       </Text>
       <TouchableOpacity style = {styles.About_Btn} onPress={()=>navigation.navigate("AboutPage")}><Text style={{color:'white', fontWeight:'bold'}}>소개 페이지</Text></TouchableOpacity>
       <Image style={styles.mainImage} source={{ uri: main }} />
