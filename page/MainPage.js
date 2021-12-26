@@ -7,7 +7,8 @@ import {
   TouchableOpacity,
   ScrollView,
   Alert,
-  LogBox
+  LogBox,
+  Platform
 } from "react-native";
 import data from "../data.json";
 import Card from "../components/Cards";

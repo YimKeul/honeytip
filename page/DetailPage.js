@@ -69,16 +69,16 @@ export default function DetailPage({ navigation, route }) {
 
 
   const like = async() =>{
-      let userUniqueID
+      let userUniqueId
       if(isIOS){
           let iosID = await Application.getIosIdForVendorAsync()
-          userUniqueID = iosID
+          userUniqueId = iosID
       }else{
-          userUniqueID = await Application.androidId
+          userUniqueId = await Application.androidId
       }
 
-      console.log(userUniqueID)
-      firebase_db.ref('/like/'+userUniqueID+'/'+ tip.idx).set(tip,function(error){
+      console.log(userUniqueId)
+      firebase_db.ref('/like/'+userUniqueId+'/'+ tip.idx).set(tip,function(error){
         console.log(error)
         Alert.alert("찜 완료!")
     });
