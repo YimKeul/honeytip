@@ -6,7 +6,8 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
-  Alert
+  Alert,
+  LogBox
 } from "react-native";
 import data from "../data.json";
 import Card from "../components/Cards";
@@ -14,10 +15,12 @@ import Loading from "../components/Loding";
 import {StatusBar} from 'expo-status-bar'
 import * as Location from 'expo-location'
 import axios from "axios";
+import {firebase_db} from "../firebaseConfig"
 const main =
   "https://firebasestorage.googleapis.com/v0/b/sparta-image.appspot.com/o/lecture%2Fmain.png?alt=media&token=8e5eb78d-19ee-4359-9209-347d125b322c";
 export default function MainPage({navigation, route}) {
   //return 구문 밖에서는 슬래시 두개 방식으로 주석
+  LogBox.ignoreLogs(['Warning: ...'])
 
   const [state, setState] = useState([]); //전체데이터
   const [cateState, setCateState] = useState([]);
@@ -26,20 +29,53 @@ export default function MainPage({navigation, route}) {
     condition : ''
   })
   const [ready, setReady] = useState(true);
-  useEffect(() => {
-
-    navigation.setOptions({
-      title : '나만의 꿀팁'
-    })
-
-
-    setTimeout(() => {
-      getLocation()
-      setState(data.tip);
-      setCateState(data.tip);
-      setReady(false);
-    }, 1000);
-  }, []);
+  // useEffect(()=>{
+  //   navigation.setOptions({
+  //     title:'나만의 꿀팁'
+  //   })  
+	// 	//뒤의 1000 숫자는 1초를 뜻함
+  //   //1초 뒤에 실행되는 코드들이 담겨 있는 함수
+  //   setTimeout(()=>{
+  //       firebase_db.ref('/tip').once('value').then((snapshot) => {
+  //         console.log("파이어베이스에서 데이터 가져왔습니다!!")
+  //         let tip = snapshot.val();
+          
+  //         setState(tip)
+  //         setCateState(tip)
+  //         getLocation()
+  //         setReady(false)
+  //       });
+  //       // getLocation()
+  //       // setState(data.tip)
+  //       // setCateState(data.tip)
+  //       // setReady(false)
+  //   },1000)
+ 
+    
+  // },[])
+  
+  useEffect(()=>{
+        //헤더의 타이틀 변경
+          navigation.setOptions({
+              title:'나만의 꿀팁'
+          })
+          firebase_db.ref('/tip').once('value').then((snapshot) => {
+            console.log("파이어베이스에서 데이터 가져왔습니다!!")
+            let tip = snapshot.val();
+            setState(tip)
+            setCateState(tip)
+            getLocation()
+            setReady(false)
+          });
+          // setTimeout(()=>{
+          //     let tip = data.tip;
+          //     setState(tip)
+          //     setCateState(tip)
+          //     getLocation()
+          //     setReady(true)
+          // },1000)
+  
+      },[])
 
 
   const getLocation = async () => {
