@@ -21,7 +21,7 @@ const main =
 export default function MainPage({navigation, route}) {
   //return 구문 밖에서는 슬래시 두개 방식으로 주석
   LogBox.ignoreLogs(['Warning: ...'])
-
+  LogBox.ignoreLogs(['Setting a timer']);
   const [state, setState] = useState([]); //전체데이터
   const [cateState, setCateState] = useState([]);
   const [weather, setWeather] = useState({
