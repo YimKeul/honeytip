@@ -24,9 +24,9 @@ export default function LikePage({ navigation, route }) {
       .ref('/like/'+userUniquedId)
       .once("value")
       .then((snapshot) => {
-        console.log(
-          "파이어베이스에서 데이터 가져왔습니다!! 지금은 likepage입니다."
-        );
+        // console.log(
+        //   "파이어베이스에서 데이터 가져왔습니다!! 지금은 likepage입니다."
+        // );
         let tip = snapshot.val();
         if (tip && tip.length > 0) {
           setTip(tip);

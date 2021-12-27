@@ -17,8 +17,8 @@ import {StatusBar} from 'expo-status-bar'
 import * as Location from 'expo-location'
 import axios from "axios";
 import {firebase_db} from "../firebaseConfig"
-const main =
-  "https://firebasestorage.googleapis.com/v0/b/sparta-image.appspot.com/o/lecture%2Fmain.png?alt=media&token=8e5eb78d-19ee-4359-9209-347d125b322c";
+// const main =
+//   "https://firebasestorage.googleapis.com/v0/b/sparta-image.appspot.com/o/lecture%2Fmain.png?alt=media&token=8e5eb78d-19ee-4359-9209-347d125b322c";
 export default function MainPage({navigation, route}) {
   //return 구문 밖에서는 슬래시 두개 방식으로 주석
   LogBox.ignoreLogs(['Warning: ...'])
@@ -54,19 +54,30 @@ export default function MainPage({navigation, route}) {
  
     
   // },[])
-  
+
+  const random= () => {
+    let min = 0
+    let max = 9
+    const rn =  Math.floor(Math.random() * (max - min + 1)) + min;
+    console.log(`랜덤 뽑기 수 : ${rn}`)
+    return rn
+  }
+  const [main, setMain] = useState()
   useEffect(()=>{
         //헤더의 타이틀 변경
           navigation.setOptions({
               title:'나만의 꿀팁'
           })
           firebase_db.ref('/tip').once('value').then((snapshot) => {
-            console.log("파이어베이스에서 데이터 가져왔습니다!!")
+            // console.log("파이어베이스에서 데이터 가져왔습니다!!")
             let tip = snapshot.val();
+            // console.log(tip[random()].idx)  
+            setMain(tip[random()].image)
             setState(tip)
             setCateState(tip)
             getLocation()
             setReady(false)
+            console.log("save")
           });
           // setTimeout(()=>{
           //     let tip = data.tip;

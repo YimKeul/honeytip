@@ -3,9 +3,22 @@
     "name": "honeytip",
     "slug": "honeytip",
     "version": "1.0.0",
-    "assetBundlePatterns": [
-      "**/*"
-    ]
+    "assetBundlePatterns": ["**/*"]
   },
-  "name": "honeytip"
+  "name": "honeytip",
+  "ios": {
+    "supportsTablet": true,
+    "buildNumber": "1.0.0",
+    "bundleIdentifier": "com.myhoneytip.yimkeul",
+    "config": {
+      "googleMobileAdsAppId": ""
+    }
+  },
+  "android": {
+    "package": "com.myhoneytip.yimkeul",
+    "versionCode": 1,
+    "config": {
+      "googleMobileAdsAppId": ""
+    }
+  }
 }
