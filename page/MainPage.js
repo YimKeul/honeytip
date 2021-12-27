@@ -51,16 +51,19 @@ export default function MainPage({ navigation, route }) {
         return d.category == cate;
       })
     }
-  
-    return test[0].image
+    const min = 0
+    const rn = Math.floor(Math.random() * (test.length - min)) + min
+    return test[rn].image
   };
 
   const what_is_cat = (weather) => {
     let cate = "";
     if (weather == "Snow") {
       cate = "생활";
-    } else {
+    } else if (weather == 'Clouds') {
       cate = "반려견";
+    }else {
+      cate = "재테크"
     }
     // console.log(cate)
     return cate;
@@ -86,8 +89,7 @@ export default function MainPage({ navigation, route }) {
        ;
         // setMain(tip[random()].image);
         setMain( main_img_(what_is_cat(weather.weather)));
-        console.log("save");
-        console.log(main_img_(what_is_cat(weather.weather)))
+     
       });
   }, []);
 
