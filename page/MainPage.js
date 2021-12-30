@@ -9,6 +9,7 @@ import {
   Alert,
   LogBox,
   Platform,
+  RefreshControl
 } from "react-native";
 import data from "../data.json";
 import Card from "../components/Cards";
@@ -17,13 +18,29 @@ import { StatusBar } from "expo-status-bar";
 import * as Location from "expo-location";
 import axios from "axios";
 import { firebase_db } from "../firebaseConfig";
-// const main =
-//   "https://firebasestorage.googleapis.com/v0/b/sparta-image.appspot.com/o/lecture%2Fmain.png?alt=media&token=8e5eb78d-19ee-4359-9209-347d125b322c";
+const main2 =
+  "https://firebasestorage.googleapis.com/v0/b/sparta-image.appspot.com/o/lecture%2Fmain.png?alt=media&token=8e5eb78d-19ee-4359-9209-347d125b322c";
+
+  const wait = (timeout) => {
+    return new Promise(resolve => setTimeout(resolve, timeout));
+  }
+
+
 export default function MainPage({ navigation, route }) {
   //return 구문 밖에서는 슬래시 두개 방식으로 주석
   LogBox.ignoreLogs(["Warning: ..."]);
   LogBox.ignoreLogs(["Setting a timer"]);
+  const [rdimg,setRdimg] = useState()
+  const [refreshing, setRefreshing] = React.useState(false);
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    console.log(`새로고침 하는중`)
+    
+    wait(1000).then(() => setRefreshing(false));
+    setRdimg(main_img_(what_,state2))
+  }, [what_]);
   const [state, setState] = useState([]); //전체데이터
+  const [state2, setState2] = useState([])
   const [cateState, setCateState] = useState([]);
   const [weather, setWeather] = useState({
     temp: 0,
@@ -31,42 +48,22 @@ export default function MainPage({ navigation, route }) {
   });
   const [ready, setReady] = useState(true);
 
-  const [main, setMain] = useState();
-  const random = () => {
-    let min = 0;
-    const rn = Math.floor(Math.random() * (state.length - min)) + min;
-
-    return rn;
-  };
-
+  const [what_, setWhat_] = useState()
   
-  const main_img_ = (cate) => {
-    let test = {}
-    if(cate==="전체보기"){
-      test = state.filter((d) => {
-        return d.category == cate;
-      })
-    }else{
-      test = state.filter((d) => {
-        return d.category == cate;
-      })
-    }
-    const min = 0
-    const rn = Math.floor(Math.random() * (test.length - min)) + min
-    return test[rn].image
-  };
 
-  const what_is_cat = (weather) => {
+  const what_is_cat = async (w) => {
+    const ww = await w
+    console.log(ww)
     let cate = "";
-    if (weather == "Snow") {
+    if (ww == "Snow") {
       cate = "생활";
-    } else if (weather == 'Clouds') {
+    } else if (ww == 'Clouds') {
       cate = "반려견";
     }else {
       cate = "재테크"
     }
-    // console.log(cate)
-    return cate;
+    setWhat_(cate)
+    console.log(what_)
   };
 
   useEffect(() => {
@@ -74,6 +71,7 @@ export default function MainPage({ navigation, route }) {
     navigation.setOptions({
       title: "나만의 꿀팁",
     });
+    
     firebase_db
       .ref("/tip")
       .once("value")
@@ -82,16 +80,57 @@ export default function MainPage({ navigation, route }) {
         let tip = snapshot.val();
         setState(tip);
          //메인화면 이미지 랜덤함수 적용
+        setState2(tip)
         setCateState(tip);
         getLocation();
-        setReady(false);
-        what_is_cat(weather.weather);
-       ;
-        // setMain(tip[random()].image);
-        setMain( main_img_(what_is_cat(weather.weather)));
+        what_is_cat(weather.weather)   
+    
+        setReady(false)
+      },  
+      );
+  },[]);
+
+
+
+  useEffect(()=>{
+    console.log(`이건가? ${what_}`)
+    
+    setRdimg(main_img_(what_,state2))
+   
+  },[what_])
+
+
+
+
+
+
+    const main_img_ = (cate,data) => {
+      let test = data
+      if(cate==="전체보기"){
+        test = state2.filter((d) => {
+          return d.category == cate;
+        })
+      }else if(cate === undefined){
+        undefined
+      }else{
+        test = state2.filter((d) => {
+          return d.category == cate;
+        })
+        const min = 0
+        const rn = Math.floor(Math.random() * (test.length - min)) + min
+        console.log(test[rn].image)
+        return test[rn].image
+        
+      }
      
-      });
-  }, []);
+ 
+    };
+
+
+
+
+
+
 
   const getLocation = async () => {
     //수많은 로직중에 에러가 발생하면
@@ -130,10 +169,16 @@ export default function MainPage({ navigation, route }) {
     }
   };
 
-  return ready ? (
-    <Loading />
-  ) : (
-    <ScrollView style={styles.container}>
+ 
+  return ready ?  (<Loading/>):(
+    <ScrollView style={styles.container}  contentContainerStyle={styles.scrollView}
+    refreshControl={
+      <RefreshControl
+        refreshing={refreshing}
+        onRefresh={onRefresh}
+      />
+    }>
+     
       <StatusBar style="light" />
       <Text style={styles.weather}>
         오늘의 날씨: {weather.temp + "°C " + weather.weather}{" "}
@@ -144,7 +189,7 @@ export default function MainPage({ navigation, route }) {
       >
         <Text style={{ color: "white", fontWeight: "bold" }}>소개 페이지</Text>
       </TouchableOpacity>
-      <Image style={styles.mainImage} source={{ uri: main }} />
+      <Image style={styles.mainImage} source={{ uri: rdimg}} />
       <ScrollView
         style={styles.middleContainer}
         horizontal
